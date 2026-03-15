@@ -24,9 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleLogin() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')));
       return;
     }
 
@@ -38,15 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       // TODO: 성공 시 메인 화면으로 이동
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('로그인 성공!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('로그인 성공!')));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 실패: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('로그인 실패: $e')));
       }
     } finally {
       if (mounted) {
@@ -54,8 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
-
 
   void _navigateToSignUp() {
     Navigator.push(
@@ -91,19 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   '새로운 인연을 시작하세요',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
                 const SizedBox(height: 60),
-                
+
                 // 이메일 입력
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: '이메일',
+                    hintText: '이메일2',
                     prefixIcon: const Icon(Icons.email_outlined),
                     filled: true,
                     fillColor: Colors.grey[100],
@@ -114,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // 비밀번호 입력
                 TextField(
                   controller: _passwordController,
@@ -131,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                
+
                 // 로그인 버튼
                 ElevatedButton(
                   onPressed: _isLoading ? null : _handleLogin,
@@ -144,19 +139,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: _isLoading 
+                  child: _isLoading
                       ? const SizedBox(
-                          height: 20, 
-                          width: 20, 
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
                         )
                       : const Text(
                           '로그인',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // 회원가입 버튼
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
