@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,9 +40,12 @@ class AuthService {
   // 백엔드 파스그레스 DB 연동
   Future<void> _createBackendProfile(User user) async {
     // 안드로이드 에뮬레이터에서 로컬 호스트 접근 시 10.0.2.2 사용
-    // iOS 시뮬레이터 또는 데스크탑에서는 localhost 또는 127.0.0.1 사용
-    // ※ 모바일 기기 실기기 테스트시에는 같은 와이파이망 공유기의 내부 IP 지정 (예: 192.168.0.x)
-    const backendUrl = 'http://localhost:3000/users/profile'; 
+    // iOS 시뮬레이터 또는 데스크탑에서는 localhost 사용
+    String host = 'localhost';
+    if (Platform.isAndroid) {
+      host = '10.0.2.2';
+    }
+    final backendUrl = 'http://$host:3000/users/profile'; 
 
     try {
       final response = await http.post(
