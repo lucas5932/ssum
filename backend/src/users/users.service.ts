@@ -22,8 +22,10 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find({
+      order: { createdAt: 'DESC' }, // 최신 가입 순으로 조회
+    });
   }
 
   findOne(id: number) {
