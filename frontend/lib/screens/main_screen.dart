@@ -85,11 +85,13 @@ class _DiscoverTabState extends State<_DiscoverTab> {
     _fetchUsers();
   }
 
-  Future<void> _fetchUsers() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+  Future<void> _fetchUsers({bool isRefresh = false}) async {
+    if (!isRefresh) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+    }
 
     try {
       String host = 'localhost';
@@ -166,8 +168,8 @@ class _DiscoverTabState extends State<_DiscoverTab> {
                         ],
                       ),
                     )
-                  : RefreshIndicator(
-                      onRefresh: _fetchUsers,
+                   : RefreshIndicator(
+                      onRefresh: () => _fetchUsers(isRefresh: true),
                       color: const Color(0xFFFF4D6D),
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -184,111 +186,115 @@ class _DiscoverTabState extends State<_DiscoverTab> {
   Widget _buildUserCard(UserModel user) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      height: 400,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+      child: AspectRatio(
+        aspectRatio: 0.85, // 좁고 긴 카드 형태 유지
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            // 프로필 이미지 (없을 경우 그라데이션 Placeholder)
-            user.profileImageUrl != null
-                ? Image.network(
-                    user.profileImageUrl!,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  )
-                : Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFFFF85A1), Color(0xFFFF4D6D)],
-                      ),
-                    ),
-                    child: const Icon(CupertinoIcons.person_fill,
-                        size: 100, color: Colors.white54),
-                  ),
-
-            // 하단 텍스트 정보 Overaly
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.8),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          user.nickname ?? '익명의 썸',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Stack(
+              children: [
+                // 프로필 이미지 (없을 경우 그라데이션 Placeholder)
+                user.profileImageUrl != null
+                    ? Image.network(
+                        user.profileImageUrl!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                    : Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFFFF85A1), Color(0xFFFF4D6D)],
                           ),
                         ),
-                        if (user.age != null) ...[
-                          const SizedBox(width: 8),
-                          Text(
-                            '${user.age}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
+                        child: const Icon(CupertinoIcons.person_fill,
+                            size: 100, color: Colors.white54),
+                      ),
+
+                // 하단 텍스트 정보 Overlay
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.8),
+                          Colors.transparent,
                         ],
-                        const Spacer(),
-                        const Icon(CupertinoIcons.location_fill,
-                            size: 14, color: Colors.white70),
-                        const SizedBox(width: 4),
-                        const Text('서울 5km',
-                            style: TextStyle(color: Colors.white70)),
-                      ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      user.bio ?? '등록된 프로필 소개가 없습니다.',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white70, fontSize: 14),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildBadge('직장인'),
-                        const SizedBox(width: 8),
-                        _buildBadge('MBTI: ENFP'),
+                        Row(
+                          children: [
+                            Text(
+                              user.nickname ?? '익명의 썸',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (user.age != null) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                '${user.age}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
+                            const Spacer(),
+                            const Icon(CupertinoIcons.location_fill,
+                                size: 14, color: Colors.white70),
+                            const SizedBox(width: 4),
+                            const Text('서울 5km',
+                                style: TextStyle(color: Colors.white70)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          user.bio ?? '등록된 프로필 소개가 없습니다.',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            _buildBadge('직장인'),
+                            const SizedBox(width: 8),
+                            _buildBadge('MBTI: ENFP'),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
