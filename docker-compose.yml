@@ -1,0 +1,16 @@
+services:
+  ssum-db:
+    image: postgres:15-alpine
+    container_name: ssum-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ssum_password}
+      POSTGRES_DB: ${DB_DATABASE:-ssum_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
