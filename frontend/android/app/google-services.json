@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "977220683377",
+    "project_id": "ssum-scream",
+    "storage_bucket": "ssum-scream.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977220683377:android:750eb8221ed537a7c67dd0",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjaiJGAbot5c39SBz-OQeRvfkwrZBaoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977220683377:android:83ac5a3f1c460241c67dd0",
+        "android_client_info": {
+          "package_name": "com.example.ssum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjaiJGAbot5c39SBz-OQeRvfkwrZBaoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
